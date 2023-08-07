@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ProfileController!{% endblock %}
+
+{% block body %}
+
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Hello {{ controller_name }}! ✅</h1>
+
+    This friendly message is coming from:
+    <ul>
+        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/tp-symfony/projet-panthere-symfony/src/Controller/ProfileController.php'|file_link(0) }}">src/Controller/ProfileController.php</a></code></li>
+        <li>Your template at <code><a href="{{ 'C:/wamp64/www/tp-symfony/projet-panthere-symfony/templates/profile/index.html.twig'|file_link(0) }}">templates/profile/index.html.twig</a></code></li>
+    </ul>
+</div>
+
+{{ dump() }}
+<div>
+    <ul>
+        {% for employeeData in organigram %}
+            {{_self.renderEmployee(employeeData)}}
+        {% endfor %}
+    </ul>
+</div>
+
+    {% macro renderEmployee(employeeData) %}
+        <li>
+            {# <a href=""  style ="text-decoration: none" "color : none"> #}
+            <div>
+            <img src="/photo/{{employeeData.photo}}" id="piou{{employeeData.id}}" width="auto" height="50px" alt="{{employeeData.firstname}} {{employeeData.lastname}}">
+            {{employeeData.firstname}} {{employeeData.lastname}} ({{employeeData.position | join(', ')}}) 
+            </div>
+            <div id="info{{employeeData.id}}" style ="display : none">
+                <button id="crounch{{employeeData.id}}">X</button>
+                <img src="/photo/{{employeeData.photo}}" width="300 px" height="auto">
+                <p>Age : {{employeeData.age}}</p>
+                <p> Adresse : {{employeeData.adresse}} </p>
+                <p> Tel : {{employeeData.tel}} </p>
+                <p> Mail : {{employeeData.mail}} </p>
+                <p> CV : {{employeeData.cv}} </p>
+            </div>
+            {# </a> #}
+            {% if employeeData.subordinates %}
+                <ul>
+                    {% for subordinate in employeeData.subordinates %}
+                        {{ _self.renderEmployee(subordinate) }}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+        
+    
+     
+    {% endmacro %}
+ {% endblock %}
+     {% block javascripts %}
+    <script type="text/javascript">
+
+    window.addEventListener('load', function() {
+        
+            for (let i=1 ; i < 9 ; i++) {
+                let ici = document.getElementById("piou"+i);
+                let la = document.getElementById('info'+i);
+                ici.addEventListener('click', function() { 
+                    if (la.style.display = "none"){
+                        la.style.display = "inline";
+                    }
+                })
+            }
+            for (let i=1 ; i < 9 ; i++) {
+                let button = document.getElementById("crounch"+i);
+                let si = document.getElementById('info'+i);
+                button.addEventListener('click', function() { 
+                    if (si.style.display = "inline"){
+                        si.style.display = "none";
+                    }
+                })
+            }
+        });
+        
+    </script> 
+{% endblock %}
+
+
+
